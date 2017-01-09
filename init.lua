@@ -341,7 +341,7 @@ local function load(filename, depth, tensortype)
                        'loads an image into a torch.Tensor', nil,
                        {type='string', help='path to file', req=true},
                        {type='number', help='force destination depth: 1 | 3'},
-                       {type='string', help='type: byte | float | double'}))
+                       {type='string', help='type: byte | float | half | double'}))
       dok.error('missing file name', 'image.load')
    end
 

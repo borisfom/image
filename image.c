@@ -25,11 +25,14 @@
 
 #include "generic/image.c"
 #include "THGenerateAllTypes.h"
+#include "generic/image.c"
+#include "THGenerateHalfType.h"
 
 DLL_EXPORT int luaopen_libimage(lua_State *L)
 {
   image_FloatMain_init(L);
   image_DoubleMain_init(L);
+  image_HalfMain_init(L);
   image_ByteMain_init(L);
 
   lua_newtable(L);
@@ -43,6 +46,10 @@ DLL_EXPORT int luaopen_libimage(lua_State *L)
   lua_newtable(L);
   luaT_setfuncs(L, image_FloatMain__, 0);
   lua_setfield(L, -2, "float");
+
+  lua_newtable(L);
+  luaT_setfuncs(L, image_HalfMain__, 0);
+  lua_setfield(L, -2, "half");
 
   lua_newtable(L);
   luaT_setfuncs(L, image_ByteMain__, 0);

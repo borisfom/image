@@ -1,4 +1,3 @@
-
 #include <TH.h>
 #include <luaT.h>
 #include <jpeglib.h>
@@ -41,12 +40,15 @@ jpeg_mem_dest_dummy(j_compress_ptr c, unsigned char **obuf, unsigned long *osiz)
 
 #include "generic/jpeg.c"
 #include "THGenerateAllTypes.h"
+#include "generic/jpeg.c"
+#include "THGenerateHalfType.h"
 
 DLL_EXPORT int luaopen_libjpeg(lua_State *L)
 {
   libjpeg_FloatMain_init(L);
   libjpeg_DoubleMain_init(L);
   libjpeg_ByteMain_init(L);
+  libjpeg_HalfMain_init(L);
 
   lua_newtable(L);
   lua_pushvalue(L, -1);
@@ -59,6 +61,10 @@ DLL_EXPORT int luaopen_libjpeg(lua_State *L)
   lua_newtable(L);
   luaT_setfuncs(L, libjpeg_FloatMain__, 0);
   lua_setfield(L, -2, "float");
+
+  lua_newtable(L);
+  luaT_setfuncs(L, libjpeg_HalfMain__, 0);
+  lua_setfield(L, -2, "half");
 
   lua_newtable(L);
   luaT_setfuncs(L, libjpeg_ByteMain__, 0);

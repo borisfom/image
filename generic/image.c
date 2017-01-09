@@ -24,12 +24,24 @@
 
 
 static inline real image_(FromIntermediate)(temp_t x) {
-#ifdef TH_REAL_IS_BYTE
+#ifdef TH_REAL_IS_HALF
+  return TH_float2half(x);
+#else
+# ifdef TH_REAL_IS_BYTE
   x += 0.5;
   if( x <= 0 ) return 0;
   if( x >= 255 ) return 255;
+# endif
+  return (real)x;
 #endif
-  return x;
+}
+
+static inline temp_t image_(ToIntermediate)(real x) {
+#ifdef TH_REAL_IS_HALF
+  return TH_half2float(x);
+#else
+  return (temp_t)x;
+#endif
 }
 
 
@@ -93,9 +105,9 @@ static void image_(Main_scaleLinear_rowcol)(THTensor *Tsrc,
         long dst_pos = dst_start + di*dst_stride;
         si_f = di * scale; si_i = (long)si_f; si_f -= si_i;
 
-        dst[dst_pos] = image_(FromIntermediate)(
-            (1 - si_f) * src[ src_start + si_i * src_stride ] +
-            si_f * src[ src_start + (si_i + 1) * src_stride ]);
+        dst[dst_pos] = image_(FromIntermediate)
+	  ((1. - si_f) * image_(ToIntermediate)(src[ src_start + si_i * src_stride ]) +
+            si_f * image_(ToIntermediate)(src[ src_start + (si_i + 1) * src_stride ]));
       }
     }
 

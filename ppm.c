@@ -43,11 +43,14 @@ static long ppm_get_long(FILE *fp)
 
 #include "generic/ppm.c"
 #include "THGenerateAllTypes.h"
+#include "generic/ppm.c"
+#include "THGenerateHalfType.h"
 
 DLL_EXPORT int luaopen_libppm(lua_State *L)
 {
   libppm_FloatMain_init(L);
   libppm_DoubleMain_init(L);
+  libppm_HalfMain_init(L);
   libppm_ByteMain_init(L);
 
   lua_newtable(L);
@@ -61,6 +64,10 @@ DLL_EXPORT int luaopen_libppm(lua_State *L)
   lua_newtable(L);
   luaT_setfuncs(L, libppm_FloatMain__, 0);
   lua_setfield(L, -2, "float");
+
+  lua_newtable(L);
+  luaT_setfuncs(L, libppm_HalfMain__, 0);
+  lua_setfield(L, -2, "half");
 
   lua_newtable(L);
   luaT_setfuncs(L, libppm_ByteMain__, 0);

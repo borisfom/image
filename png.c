@@ -60,12 +60,15 @@ libpng_error_fn(png_structp png_ptr, png_const_charp error_msg)
 
 #include "generic/png.c"
 #include "THGenerateAllTypes.h"
+#include "generic/png.c"
+#include "THGenerateHalfType.h"
 
 DLL_EXPORT int luaopen_libpng(lua_State *L)
 {
   libpng_FloatMain_init(L);
   libpng_DoubleMain_init(L);
   libpng_ByteMain_init(L);
+  libpng_HalfMain_init(L);
 
   lua_newtable(L);
   lua_pushvalue(L, -1);
@@ -78,6 +81,10 @@ DLL_EXPORT int luaopen_libpng(lua_State *L)
   lua_newtable(L);
   luaT_setfuncs(L, libpng_FloatMain__, 0);
   lua_setfield(L, -2, "float");
+
+  lua_newtable(L);
+  luaT_setfuncs(L, libpng_HalfMain__, 0);
+  lua_setfield(L, -2, "half");
 
   lua_newtable(L);
   luaT_setfuncs(L, libpng_ByteMain__, 0);
